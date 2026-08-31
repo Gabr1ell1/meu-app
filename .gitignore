@@ -46,4 +46,4 @@ yarn-error.*
 .vscode/
 
 # Agent
-AGENTS/
+AGENTS.md

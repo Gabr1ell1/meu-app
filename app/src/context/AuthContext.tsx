@@ -1,9 +1,13 @@
-import { login as loginApi, logout as logoutApi, register as registerApi } from "@/services/api";
-import { setUnauthorizeHandler } from "@/src/integration/httpClient";
-import { AuthRequest, RegisterRequest, SessionUser } from "@/src/types/auth";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import {
+    login as loginApi,
+    register as registerApi,
+    logout as logoutApi
+} from "../services/api";
+import { setUnauthorizeHandler } from "../integration/httpClient";
+import { AuthRequest, RegisterRequest, SessionUser } from "../types/auth";
 
 type AuthContextData = {
     isAuthenticated: boolean;
@@ -15,6 +19,15 @@ type AuthContextData = {
 };
 
 const AuthContext = createContext({} as AuthContextData);
+
+// Pra onde mandar o usuário logo após autenticar, conforme o papel.
+function redirectByRole(role: SessionUser["role"]) {
+    if (role === "PSYCHOLOGIST") {
+        router.replace("/psicologo");
+    } else {
+        router.replace("/paciente");
+    }
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<SessionUser | null>(null);
@@ -34,33 +47,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     useEffect(() => {
-  (async () => {
-    try {
-      const raw = await AsyncStorage.getItem("@Auth:user");
-
-      if (raw) {
-        try {
-          const parsedUser = JSON.parse(raw);
-
-          setUser(parsedUser);
-          setIsAuthenticated(true);
-        } catch {
-          console.log("Sessão inválida. Limpando...");
-          await AsyncStorage.removeItem("@Auth:user");
-        }
-      }
-    } catch (error) {
-      console.log("Erro ao recuperar sessão:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  })();
-}, []);
+        (async () => {
+            // Modo mock: como não existe cookie de verdade, restauramos
+            // a sessão salva localmente. Modo real: o ideal é validar
+            // com getMe() (ver AuthContext do projeto com backend real).
+            const raw = await AsyncStorage.getItem("@Auth:user");
+            if (raw) {
+                const sessionUser: SessionUser = JSON.parse(raw);
+                setUser(sessionUser);
+                setIsAuthenticated(true);
+            }
+            setIsLoading(false);
+        })();
+    }, []);
 
     useEffect(() => {
         setUnauthorizeHandler(() => {
             clearSession();
-            router.replace("/");
+            router.replace("/(auth)");
         });
     }, []);
 
@@ -68,6 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
             const sessionUser = await loginApi(data);
             await persistSession(sessionUser);
+            redirectByRole(sessionUser.role);
             return { ok: true };
         } catch {
             return { ok: false };
@@ -79,17 +84,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             await registerApi(data);
             return { ok: true };
         } catch (err: any) {
-            return { ok: false, error: err.response?.data?.message ?? "Erro desconhecido" };
+            return {
+                ok: false,
+                error: err.response?.data?.message ?? "Erro desconhecido"
+            };
         }
     }
 
     async function signOut() {
-        await logoutApi();
-        await clearSession();
+        try {
+            await logoutApi();
+        } finally {
+            await clearSession();
+            router.replace("/(auth)");
+        }
     }
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, isLoading, signIn, signUp, signOut }}>
+        <AuthContext.Provider
+            value={{ user, isAuthenticated, isLoading, signIn, signUp, signOut }}
+        >
             {children}
         </AuthContext.Provider>
     );

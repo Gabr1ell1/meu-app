@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import {
   View,
   Text,
@@ -8,63 +7,47 @@ import {
   useWindowDimensions,
   Image,
 } from "react-native";
-
 import { router } from "expo-router";
+import { useAuth } from "../../context/AuthContext";
+import { AuthInput } from "../../components/auth/authInput";
+import { Role } from "../../types/auth";
 
-import { useAuth } from "../../src/context/AuthContext";
-
-import { AuthInput } from "@/components/auth/authInput";
 
 export default function Register() {
   const { signUp } = useAuth();
-
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState<Role>("PATIENT");
 
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
   const { width } = useWindowDimensions();
   const isMobile = width < 700;
 
   async function handleRegister() {
     setError("");
-
-    if (
-      !username ||
-      !password ||
-      !confirmPassword
-    ) {
-      setError("Preencha todos os campos.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("As senhas não coincidem.");
-      return;
-    }
-
     const result = await signUp({
       username,
+      email,
       password,
-      
+      role,
     });
 
     if (result.ok) {
-      router.replace("/(auth)");
+      setSuccess(true);
+      setTimeout(() => {
+        router.replace("/(auth)");
+      }, 1200);
     } else {
-      setError(
-        result.error || "Não foi possível realizar o cadastro."
-      );
+      setError(result.error ?? "Erro ao cadastrar");
     }
   }
 
   return (
     <View style={styles.background}>
-
-      {/* =========================
-          DECORAÇÕES
-      ========================= */}
-
+      {/* DECORAÇÕES */}
       <View
         style={[
           styles.decorTop,
@@ -79,10 +62,7 @@ export default function Register() {
         ]}
       />
 
-      {/* =========================
-          CARD PRINCIPAL
-      ========================= */}
-
+      {/* CARD */}
       <View
         style={[
           styles.card,
@@ -93,7 +73,6 @@ export default function Register() {
         {/* =========================
             FORMULÁRIO
         ========================= */}
-
         <View
           style={[
             styles.formContainer,
@@ -113,14 +92,25 @@ export default function Register() {
             Conecte-se à nossa rede profissional.
           </Text>
 
-    
           {/* USUÁRIO */}
+
           <View style={styles.inputGroup}>
             <AuthInput
               label="Usuário"
               placeholder="Digite aqui..."
               value={username}
               onChangeText={setUsername}
+            />
+          </View>
+
+          {/* E-MAIL */}
+
+          <View style={styles.inputGroup}>
+            <AuthInput
+              label="E-mail"
+              placeholder="Digite seu e-mail"
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
 
@@ -136,16 +126,26 @@ export default function Register() {
             />
           </View>
 
-          {/* CONFIRMAR SENHA */}
+          {/* TIPO DE USUÁRIO */}
 
-          <View style={styles.inputGroup}>
-            <AuthInput
-              label="Confirmar senha"
-              placeholder="Digite sua senha novamente"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
+          <Text style={styles.roleLabel}>
+            Eu sou:
+          </Text>
+
+          <View style={styles.roleRow}>
+
+            <RoleOption
+              label="Paciente"
+              selected={role === "PATIENT"}
+              onPress={() => setRole("PATIENT")}
             />
+
+            <RoleOption
+              label="Psicólogo(a)"
+              selected={role === "PSYCHOLOGIST"}
+              onPress={() => setRole("PSYCHOLOGIST")}
+            />
+
           </View>
 
           {/* ERRO */}
@@ -153,6 +153,14 @@ export default function Register() {
           {error ? (
             <Text style={styles.error}>
               {error}
+            </Text>
+          ) : null}
+
+          {/* SUCESSO */}
+
+          {success ? (
+            <Text style={styles.success}>
+              Conta criada! Redirecionando...
             </Text>
           ) : null}
 
@@ -220,21 +228,41 @@ export default function Register() {
 
           </View>
 
-          {/* FUTURA ILUSTRAÇÃO */}
-
           <View style={styles.imagePlaceholder}>
-             <Image
-                source={require("@/assets/images/dddd.png")}
-                style={styles.image}
-                resizeMode="contain"
-                />
           </View>
-
         </View>
-
       </View>
-
     </View>
+  );
+}
+
+function RoleOption({
+  label,
+  selected,
+  onPress,
+}: {
+  label: string;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={[
+        styles.roleOption,
+        selected && styles.roleOptionSelected,
+      ]}
+    >
+      <Text
+        style={
+          selected
+            ? styles.roleTextSelected
+            : styles.roleText
+        }
+      >
+        {label}
+      </Text>
+    </Pressable>
   );
 }
 
@@ -333,16 +361,7 @@ const styles = StyleSheet.create({
 
     flexDirection: "column",
   },
-imageContainer: {
-  height: 220,
-  justifyContent: "center",
-  alignItems: "center",
-},
 
-image: {
-  width: "100%",
-  height: "100%",
-},
   /* =========================
      FORMULÁRIO
   ========================= */
@@ -402,11 +421,79 @@ image: {
   },
 
   /* =========================
-     ERRO
+     ROLE
+  ========================= */
+
+  roleLabel: {
+    color: "#526562",
+
+    fontSize: 13,
+
+    fontWeight: "600",
+
+    marginTop: 4,
+
+    marginBottom: 8,
+  },
+
+  roleRow: {
+    flexDirection: "row",
+
+    gap: 8,
+
+    marginBottom: 8,
+  },
+
+  roleOption: {
+    flex: 1,
+
+    padding: 10,
+
+    borderWidth: 1,
+
+    borderColor: "#BFCFCC",
+
+    borderRadius: 8,
+
+    alignItems: "center",
+  },
+
+  roleOptionSelected: {
+    backgroundColor: "#4F8F8A",
+
+    borderColor: "#4F8F8A",
+  },
+
+  roleText: {
+    color: "#526562",
+
+    fontSize: 13,
+  },
+
+  roleTextSelected: {
+    color: "#FFFFFF",
+
+    fontWeight: "600",
+
+    fontSize: 13,
+  },
+
+  /* =========================
+     ERRO / SUCESSO
   ========================= */
 
   error: {
     color: "#C95C5C",
+
+    fontSize: 13,
+
+    marginTop: 5,
+
+    marginBottom: 10,
+  },
+
+  success: {
+    color: "#2E7D32",
 
     fontSize: 13,
 
@@ -545,11 +632,9 @@ image: {
     alignItems: "center",
   },
 
-  imagePlaceholderText: {
-    color: "#DDEDEA",
+  image: {
+    width: "100%",
 
-    fontSize: 14,
-
-    opacity: 0.7,
+    height: "100%",
   },
 });

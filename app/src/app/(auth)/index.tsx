@@ -1,59 +1,67 @@
 import { useState } from "react";
 import {
-    Pressable,
-    StyleSheet,
-    Text,
-    useWindowDimensions,
-    View, 
-    Image
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+  Image,
 } from "react-native";
-
-import { AuthInput } from "@/components/auth/authInput";
-import { useAuth } from "@/src/context/AuthContext";
 import { router } from "expo-router";
+import { AuthInput } from "../../components/auth/authInput";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const { signIn } = useAuth();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const { width } = useWindowDimensions();
-
   const isMobile = width < 700;
 
   async function handleLogin() {
+    setError("");
+
     const result = await signIn({
       username,
       password,
     });
 
-    if (result.ok) {
-      router.replace("/(app)");
-    } else {
+    if (!result.ok) {
       setError("Usuário ou senha inválidos");
     }
+
+    // Se der certo, o AuthContext já pode fazer o redirecionamento.
+    // Se ele NÃO fizer, podemos usar router.replace aqui.
   }
 
   return (
     <View style={styles.background}>
+      {/* DECORAÇÕES */}
+      <View
+        style={[
+          styles.decorTop,
+          isMobile && styles.decorMobile,
+        ]}
+      />
 
-      {/* DECORAÇÕES LATERAIS */}
-
-      <View style={[styles.decorTop, isMobile && styles.decorMobile]} />
-      <View style={[styles.decorBottom, isMobile && styles.decorMobile]} />
+      <View
+        style={[
+          styles.decorBottom,
+          isMobile && styles.decorMobile,
+        ]}
+      />
 
       {/* CARD PRINCIPAL */}
-
       <View
         style={[
           styles.card,
           isMobile && styles.cardMobile,
         ]}
       >
-
-        {/* LADO ESQUERDO */}
+        {/* =========================
+            LADO ESQUERDO
+        ========================= */}
 
         <View
           style={[
@@ -62,7 +70,9 @@ export default function Login() {
           ]}
         >
           <View>
-            <Text style={styles.brand}>MENTALINK</Text>
+            <Text style={styles.brand}>
+              MENTALINK
+            </Text>
 
             <Text style={styles.presentationTitle}>
               Conectando pessoas
@@ -77,27 +87,25 @@ export default function Login() {
               compartilhe experiências e construa
               conexões que fazem a diferença.
             </Text>
+
           </View>
 
-          {/* FUTURA IMAGEM / ILUSTRAÇÃO */}
-
+          {/* ILUSTRAÇÃO */}
           <View style={styles.imagePlaceholder}>
-            <Image
-                            source={require("@/assets/images/dddd.png")}
-                            style={styles.image}
-                            resizeMode="contain"
-                            />
+           
           </View>
         </View>
 
-        {/* LADO DO LOGIN */}
-
+        {/* =========================
+            LADO DO LOGIN
+        ========================= */}
         <View
           style={[
             styles.formContainer,
             isMobile && styles.formContainerMobile,
           ]}
         >
+
           <Text style={styles.welcome}>
             BEM-VINDO(A)
           </Text>
@@ -111,29 +119,23 @@ export default function Login() {
           </Text>
 
           {/* USUÁRIO */}
-
           <View style={styles.inputGroup}>
-           
             <AuthInput
-            label="Usuário"
-            placeholder="Digite seu usuário"
-            value={username}
-            onChangeText={setUsername}
+              label="Usuário"
+              placeholder="Digite seu usuário"
+              value={username}
+              onChangeText={setUsername}
             />
-
-
           </View>
-
           {/* SENHA */}
 
           <View style={styles.inputGroup}>
-
-           <AuthInput
-            label="Senha"
-            placeholder="Digite sua senha"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
+            <AuthInput
+              label="Senha"
+              placeholder="Digite sua senha"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
             />
           </View>
 
@@ -145,16 +147,13 @@ export default function Login() {
           ) : null}
 
           {/* ESQUECI SENHA */}
-          <Pressable
-            style={styles.forgotButton}
-          >
+          <Pressable style={styles.forgotButton}>
             <Text style={styles.forgotText}>
               Esqueci minha senha
             </Text>
           </Pressable>
 
           {/* BOTÃO */}
-
           <Pressable
             style={styles.loginButton}
             onPress={handleLogin}
@@ -171,16 +170,14 @@ export default function Login() {
             </Text>
 
             <Pressable
-              onPress={() => router.push("/register")}
+              onPress={() => router.push("/(auth)/register")}
             >
               <Text style={styles.registerLink}>
                 Cadastre-se
               </Text>
             </Pressable>
           </View>
-
         </View>
-
       </View>
     </View>
   );
@@ -262,6 +259,7 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.12,
     shadowRadius: 20,
+
     shadowOffset: {
       width: 0,
       height: 8,
@@ -271,18 +269,10 @@ const styles = StyleSheet.create({
   cardMobile: {
     width: "100%",
     minHeight: 0,
+
     flexDirection: "column",
   },
-imageContainer: {
-  height: 220,
-  justifyContent: "center",
-  alignItems: "center",
-},
 
-image: {
-  width: "100%",
-  height: "100%",
-},
   /* =========================
      LADO ESQUERDO
   ========================= */
@@ -337,7 +327,7 @@ image: {
   },
 
   /* =========================
-     FUTURA ILUSTRAÇÃO
+     ILUSTRAÇÃO
   ========================= */
 
   imagePlaceholder: {
@@ -347,12 +337,9 @@ image: {
     alignItems: "center",
   },
 
-  imagePlaceholderText: {
-    color: "#DDEDEA",
-
-    fontSize: 14,
-
-    opacity: 0.7,
+  image: {
+    width: "100%",
+    height: "100%",
   },
 
   /* =========================
@@ -409,28 +396,6 @@ image: {
     marginBottom: 20,
   },
 
-  label: {
-    color: "#526562",
-
-    fontSize: 13,
-    fontWeight: "600",
-
-    marginBottom: 8,
-  },
-
-  input: {
-    height: 50,
-
-    borderBottomWidth: 1.5,
-    borderBottomColor: "#BFCFCC",
-
-    color: "#29413F",
-
-    fontSize: 15,
-
-    paddingHorizontal: 4,
-  },
-
   /* =========================
      ERRO
   ========================= */
@@ -458,12 +423,11 @@ image: {
     color: "#4F8F8A",
 
     fontSize: 13,
-
     fontWeight: "600",
   },
 
   /* =========================
-     BOTÃO LOGIN
+     BOTÃO
   ========================= */
 
   loginButton: {

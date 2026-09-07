@@ -11,7 +11,7 @@ export function setUnauthorizeHandler(handler: UnauthorizeHandler) {
 export function createApi(baseURL: string) {
     const instance = axios.create({
         baseURL,
-        withCredentials: true, // já deixa pronto pra cookie quando o back real entrar
+        withCredentials: true,
     });
 
     instance.interceptors.response.use(

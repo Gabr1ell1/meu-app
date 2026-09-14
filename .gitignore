@@ -49,3 +49,6 @@ yarn-error.*
 AGENTS.md
 
 expo-env.d.ts
+/app/nbproject/private/
+/backend/mentalink-api/target/
+/backend/elo-api/target/

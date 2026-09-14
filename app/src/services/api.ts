@@ -26,7 +26,7 @@ export const login = async (data: AuthRequest): Promise<SessionUser> => {
 
 export const register = async (data: RegisterRequest): Promise<void> => {
     if (USE_MOCK) return mockRegister(data);
-    await authApi.post('/register', data);
+    await authApi.post('/user/save', data);   
 };
 
 export const logout = async (): Promise<void> => {

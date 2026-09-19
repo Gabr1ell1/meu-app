@@ -30,13 +30,13 @@ O principal objetivo da ELO é:
 
 | Responsável	        Papel
 
-👤 Paciente	        Busca atendimento, fornece informações e escolhe entre as opções disponíveis
+👤 Paciente	   -     Busca atendimento, fornece informações e escolhe entre as opções disponíveis
 
-🧑‍⚕️ Psicólogo	        Define condições do serviço e é responsável pelo atendimento psicológico
+🧑‍⚕️ Psicólogo	  -      Define condições do serviço e é responsável pelo atendimento psicológico
 
-🧠 Supervisor	        Quando aplicável, oferece supervisão e desenvolvimento profissional
+🧠 Supervisor	   -     Quando aplicável, oferece supervisão e desenvolvimento profissional
 
-💻 ELO	                Facilita comunicação, organização e conexão entre as partes
+💻 ELO	        -        Facilita comunicação, organização e conexão entre as partes
 
 ---
 

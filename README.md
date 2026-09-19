@@ -26,18 +26,6 @@ O principal objetivo da ELO é:
 
 > **Reduzir o tempo de espera de pacientes por atendimento psicológico clínico, ao mesmo tempo em que cria um caminho ético e supervisionado para novos psicólogos ingressarem na prática clínica com casos reais.**
 
-### Benefícios da plataforma
-
-| Responsável	        Papel
-
-👤 Paciente	   -     Busca atendimento, fornece informações e escolhe entre as opções disponíveis
-
-🧑‍⚕️ Psicólogo	  -      Define condições do serviço e é responsável pelo atendimento psicológico
-
-🧠 Supervisor	   -     Quando aplicável, oferece supervisão e desenvolvimento profissional
-
-💻 ELO	        -        Facilita comunicação, organização e conexão entre as partes
-
 ---
 
 ## 📱 Funcionalidades
@@ -54,17 +42,6 @@ O sistema possui autenticação de usuários utilizando:
 * Validação da autenticação para acesso às áreas protegidas da aplicação.
 
 O uso do JWT permite que o backend identifique o usuário autenticado durante as requisições.
-
-### 👤 Usuários
-
-A aplicação trabalha com diferentes perfis de usuários, como:
-
-* **Paciente**
-* **Psicólogo**
-* **Psicólogo**
-* **Psicólogo Sênior**
-
-Cada perfil pode possuir funcionalidades específicas dentro da plataforma.
 
 ### 📋 Atendimento psicológico
 

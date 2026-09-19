@@ -28,11 +28,11 @@ O principal objetivo da ELO é:
 
 ### Benefícios da plataforma
 
-| Usuário                | Benefício                                                |
-| ---------------------- | -------------------------------------------------------- |
-| 🧑‍⚕️ Psicólogo sênior | Aproveita parte da demanda que não conseguiria atender   |
-| 👩‍💻 Psicólogo júnior | Consegue experiência e acompanhamento profissional       |
-| 🧑 Paciente            | Possui uma alternativa com menor espera e valor reduzido |
+| Responsável	        Papel
+👤 Paciente	        Busca atendimento, fornece informações e escolhe entre as opções disponíveis
+🧑‍⚕️ Psicólogo	        Define condições do serviço e é responsável pelo atendimento psicológico
+🧠 Supervisor	        Quando aplicável, oferece supervisão e desenvolvimento profissional
+💻 ELO	                Facilita comunicação, organização e conexão entre as partes
 
 ---
 

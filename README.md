@@ -29,9 +29,13 @@ O principal objetivo da ELO é:
 ### Benefícios da plataforma
 
 | Responsável	        Papel
+
 👤 Paciente	        Busca atendimento, fornece informações e escolhe entre as opções disponíveis
+
 🧑‍⚕️ Psicólogo	        Define condições do serviço e é responsável pelo atendimento psicológico
+
 🧠 Supervisor	        Quando aplicável, oferece supervisão e desenvolvimento profissional
+
 💻 ELO	                Facilita comunicação, organização e conexão entre as partes
 
 ---

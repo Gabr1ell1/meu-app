@@ -57,7 +57,7 @@ A aplicação trabalha com diferentes perfis de usuários, como:
 
 * **Paciente**
 * **Psicólogo**
-* **Psicólogo Júnior**
+* **Psicólogo**
 * **Psicólogo Sênior**
 
 Cada perfil pode possuir funcionalidades específicas dentro da plataforma.

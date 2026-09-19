@@ -245,11 +245,12 @@ Senha: [SENHA]
 
 Os dados acima devem ser substituídos pelas credenciais utilizadas no projeto.
 
-👩‍💻 Equipe
+## 👩‍💻 Equipe
 
 Projeto desenvolvido por:
 
 [Gabrielly Nascimento Bento]
+
 [Maria Eduarda Monteiro Viana]
 
 📚 Disciplina

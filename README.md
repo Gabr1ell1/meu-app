@@ -253,6 +253,14 @@ Projeto desenvolvido por:
 
 [Maria Eduarda Monteiro Viana]
 
+
+## Telas
+
+<img width="1363" height="632" alt="image" src="https://github.com/user-attachments/assets/c1653c2c-af30-44ee-b8ff-c405efabdacd" />
+
+<img width="1363" height="631" alt="image" src="https://github.com/user-attachments/assets/a54efc1c-4aec-4d0e-81d3-5e7aa304a8a3" />
+
+
 📚 Disciplina
 
 Técnicas Avançadas de Programação Web Mobile
